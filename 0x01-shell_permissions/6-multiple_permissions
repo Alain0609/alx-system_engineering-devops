@@ -1,2 +1,2 @@
 #!/bin/bash
-chgrp u+x hello
+chmod 07 hello
