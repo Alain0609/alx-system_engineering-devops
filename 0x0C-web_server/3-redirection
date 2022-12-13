@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Script Configure your Nginx server so that /redirect_me is redirecting to another page.
+
+apt-get -y update
+apt-get -y install nginx
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+var1="\\\tlocation /redirect_me {\n\t\t return 301 https://www.github.com/belovetech;\n\t}\n"
+sed -i "30i $var1" /etc/nginx/sites-available/default
+service nginx restart
