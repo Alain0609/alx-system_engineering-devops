@@ -20,24 +20,24 @@ touch /var/www/html/404.html
 echo "Ceci n'est pas une page" > /var/www/html/404.html
 
 printf %s "server {
-        listen 80;
-        listen [::]:80 default_server;
-        
-        add_header X-Served-By $HOSTNAME;
-                
-        root /var/www/html/;
-        index index.html index.htm index.html-debian.html;
-                
-        location /redirect_me{
-            return 301 https://www.github.com/belovetech;
-        }
-        
-        error_page 404 /404.html;
-        location /404{
-            root /var/www/html/;
-            internal;
-        }    
-    
+listen 80;
+listen [::]:80 default_server;
+
+add_header X-Served-By $HOSTNAME;
+
+root /var/www/html/;
+index index.html index.htm index.html-debian.html;
+
+location /redirect_me{
+return 301 https://www.github.com/belovetech;
+}
+
+error_page 404 /404.html;
+location /404{
+root /var/www/html/;
+internal;
+}
+
 }" > /etc/nginx/sites-available/default
 
 service nginx restart
