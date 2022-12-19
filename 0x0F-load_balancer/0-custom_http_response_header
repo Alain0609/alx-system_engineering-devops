@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Install and configure nginx server with the following requirement
+#+    Listens on port 80.
+#+    Returns a page containing "Holberton School" when queried
+#+     at the root with a curl GET request.
+# Configures /redirect_me as a "301 Moved Permanently".
+# Includes a custom 404 page containing "Ceci n'est pas une page".
+# Configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02)
+# The name of the custom HTTP header must be X-Served-By
+# The value of the custom HTTP header must be the hostname of the server Nginx is running on
+
+
+apt-get -y update
+apt-get install -y nginx
+
+mkdir -p /var/www/html
+touch /var/www/html/index.html
+echo "Hello World!" > /var/www/html/index.html
+touch /var/www/html/404.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+
+printf %s "server {
+        listen 80;
+        listen [::]:80 default_server;
+        
+        add_header X-Served-By $HOSTNAME;
+                
+        root /var/www/html/;
+        index index.html index.htm index.html-debian.html;
+                
+        location /redirect_me{
+            return 301 https://www.github.com/belovetech;
+        }
+        
+        error_page 404 /404.html;
+        location /404{
+            root /var/www/html/;
+            internal;
+        }    
+    
+}" > /etc/nginx/sites-available/default
+
+service nginx restart
